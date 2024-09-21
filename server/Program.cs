@@ -10,7 +10,6 @@ namespace ClientServer
     {
         static void Main(string[] args)
         {
-
             var server = new Server();
             server.Connect();
             Console.ReadLine();
