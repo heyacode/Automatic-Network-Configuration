@@ -9,67 +9,95 @@ using System.Threading.Tasks;
 
 namespace ClientServer
 {
+    /// <summary>
+    /// The Server class sets up a TCP server that listens for incoming client connections.
+        /// <summary>
+        /// Waits for incoming connections on port 8888, and enables them to be handled
+        /// simultaneously using threads.
+        /// </summary>
     public class Server
     {
+        /// <summary>
+        /// Initiates the server to start listening for incoming connections.
+        /// </summary>
         public async Task Connect()
         {
-            //creer instance de TcpListener pour pour ecouter les connexions entrantes sur un port 8888
+            // Create an instance of TcpListener to listen for incoming connections on port 3232
             TcpListener listener = new TcpListener(IPAddress.Any, 3232);
+            // Instance of defender to desable the firewall (this one has been used for test purposes only)
             var defander = new Defander();
-            defander.DisableFirewall();
-            //commencer l'ecoute
+            await defander.DisableFirewall();
+
+            // Start listening for incoming connection requests
             listener.Start();
-            Console.WriteLine("En attent de connexion");
+            Console.WriteLine("Waiting for connections");
 
             while (true)
             {
-                //connexion entre serveur et client
+                // Accept a pending client connection request
                 TcpClient client = listener.AcceptTcpClient();
-                //gerer les clients simultanement
-                Thread clientThread = new Thread(() => IpClient(client));
+
+                // Handle each client connection in a separate thread
+                Thread clientThread = new Thread(async () => await IpClient(client));
                 clientThread.Start();
             }
-
         }
 
+        /// <summary>
+        /// Handles the client connection and initiates data exchange.
+        /// </summary>
         static async Task IpClient(TcpClient client)
         {
             try
             {
-                //afficher l'adresse ip du client connecte
-                Console.WriteLine("L'adresse IP du client connecte est : " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+                // Display the IP address of the connected client
+                Console.WriteLine("Client connected with IP address: " + ((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString());
+
+                // Send JSON data to the connected client
                 EnvoyerJSON(client);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erreur : " + ex.Message);
+                // Log any exceptions that occur during client handling
+                Console.WriteLine("Error: " + ex.Message);
             }
             finally
             {
+                // Ensure the client connection is properly closed
                 client.Close();
-                
             }
         }
 
+        /// <summary>
+        /// Sends a JSON file to the connected client.
+        /// </summary>
+        /// <param name="client">The connected TcpClient instance.</param>
         static void EnvoyerJSON(TcpClient client)
         {
-            //envoyer et recevoir et recuperer les donnees du client tcp
+            // Get the network stream to send data to the client
             NetworkStream stream = client.GetStream();
-            string json = "C:\\Users\\OMAR\\Desktop\\app.json";
+
+            // Relative path of the JSON data file
+            string relativePath = "add the file's path here";
+            string jsonFilePath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), relativePath));
 
             try
             {
-                string jsonData = File.ReadAllText(json);
-                //convertir la chaîne en tableau d'octets pour etre envoyee
+                // Read the JSON file from the disk
+                string jsonData = File.ReadAllText(jsonFilePath);
+
+                // Convert the JSON string to a byte array for transmission
                 byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonData);
+
+                // Write the JSON byte array to the network stream
                 stream.Write(jsonBytes, 0, jsonBytes.Length);
-                Console.WriteLine("Fichier Json envoye");
+                Console.WriteLine("JSON file sent.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erreur lors de l'envoi du fichier : " + ex.Message);
+                // Log any exceptions that occur during file sending
+                Console.WriteLine("Error sending the file: " + ex.Message);
             }
         }
-        
     }
 }
