@@ -1,0 +1,94 @@
+# Ignore build outputs
+bin/
+obj/
+out/
+
+# User-specific files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.config.user
+
+# Mono auto generated files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code workspace
+.vscode/*
+
+# Visual Studio Code's extensions file
+*.code-workspace
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Visual Studio database files
+*.mdf
+*.ldf
+
+# SQL Server files
+*.pdb
+*.ldf
+*.ndf
+
+# NuGet Packages
+*.nupkg
+# Uncomment if using NuGet Packages folder instead of PackageReference
+# packages/
+# Include patterns to preserve NuGet props and targets files
+!packages/*.props
+!packages/*.targets
+
+# Rider IDE files
+.idea/
+*.sln.iml
+
+# Backup & restore directories for packages
+Backup/
+Restore/
+
+# StyleCop code analysis
+*.stylecop
+
+# JetBrains Rider
+.idea/
+*.sln.ide
+
+# Local history for Visual Studio
+.localhistory
+
+# Logs
+*.log
+
+# User preferences
+.vscode/
+
+# Application Insights
+ApplicationInsights.config
+
+# Microsoft Azure Web App publish settings
+*.PublishSettings
+
+# DotNet- and NuGet-specific caches
+**/project.lock.json
+**/project.fragment.lock.json
+.nuget/packages/
+.nuget/
+
+# Rider Project Files
+.idea/
+
+# Ignore Visual Studio-specific folder
+.vs/
