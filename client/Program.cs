@@ -13,7 +13,6 @@ namespace ClientServer
             var client = new Client();
             await client.Connect();
             Console.ReadLine();
-
         }
     }
 }
