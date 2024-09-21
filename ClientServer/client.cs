@@ -10,32 +10,28 @@ namespace ClientServer
 {
     public class Client
     {
-
         public async Task Connect()
         {
             var findServer = new FindServer();
             string ipServer = await findServer.ScanServer();
-
             while (true)
             {
                 TcpClient client = new TcpClient();
-
                 try
                 {
                     client.Connect(ipServer, 3232);
                     Console.WriteLine("Client connecte");
-                    //envoyer et recevoir des donnees
+                    //send and receive data
                     NetworkStream stream = client.GetStream();
-                    //lire ces donnees
+                    //read data
                     await LectureJSON(stream);
                     break;
-
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Erreur de connexion : " + ex.Message);
-                    //se connecter a nouveau au serveur apres 2s
                     //System.Threading.Thread.Sleep(2000);
+                    //try a new connection with a new server after 2s
                 }
                 finally
                 {
@@ -52,7 +48,6 @@ namespace ClientServer
                 MemoryStream flux = new MemoryStream();
                 byte[] buffer = new byte[1024];
                 int bytesRead;
-
                 while (true)
                 {
                     bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
@@ -66,7 +61,6 @@ namespace ClientServer
                 string jsonData = Encoding.UTF8.GetString(flux.ToArray());
                 Console.WriteLine("Fichier JSON reçu :");
                 Console.WriteLine(jsonData);
-
                 return jsonData;
             }
             catch (Exception ex)
@@ -77,10 +71,6 @@ namespace ClientServer
         }
 
     }
-
-
-
-
 }
 
 
